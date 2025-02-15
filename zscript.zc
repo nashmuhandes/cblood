@@ -1,0 +1,171 @@
+version "4.14.1"
+
+// Copyright 2020 - 2025 Nash Muhandes
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. The name of the author may not be used to endorse or promote products
+//    derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+// OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+// NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+// THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+//===========================================================================
+//
+// CBlood
+// Written by Nash Muhandes
+//
+// License: MIT
+//
+//===========================================================================
+
+class CBloodHandler : EventHandler
+{
+	override void WorldThingSpawned(WorldEvent e)
+	{
+		if (!e.Thing)
+			return;
+
+		Actor mo = e.Thing;
+
+		if (!mo.bShootable)
+			return;
+
+		CBlood.Process(mo);
+	}
+}
+
+//===========================================================================
+//
+//
+//
+//===========================================================================
+
+class CBlood play
+{
+	static void Process(Actor mo)
+	{
+		String className = "CBlood" .. mo.GetClassName();
+		class<Actor> cls = className;
+		if (cls)
+		{
+			let cblood = GetDefaultByType(cls);
+			if (cblood)
+			{
+				mo.bNoBlood = cblood.bNoBlood;
+				mo.CopyBloodColor(cblood);
+			}
+		}
+	}
+}
+
+//===========================================================================
+//
+// Doom monsters
+//
+//===========================================================================
+
+class CBloodBaronOfHell : Actor abstract
+{
+	Default
+	{
+		BloodColor "30 67 23";
+	}
+}
+
+class CBloodHellKnight : CBloodBaronOfHell abstract {}
+
+class CBloodCacodemon : Actor abstract
+{
+	Default
+	{
+		BloodColor "00 00 F9";
+	}
+}
+
+class CBloodLostSoul : Actor abstract
+{
+	Default
+	{
+		+NOBLOOD
+	}
+}
+
+//===========================================================================
+//
+// Chex Quest monsters
+// Yes, while GZDoom does define the default blood color inside the MAPINFO,
+// it doesn't seem to work correctly with Nash's Gore Mod. So now, we force
+// the blood color on the actor level.
+//
+//===========================================================================
+
+class CBloodChexBlood : Actor abstract
+{
+	Default
+	{
+		BloodColor "3F 7D 39";
+		-NOBLOOD
+	}
+}
+
+class CBloodChexPlayer : CBloodChexBlood abstract {}
+class CBloodFlemoidusCommonus : CBloodChexBlood abstract {}
+class CBloodFlemoidusBipedicus : CBloodChexBlood abstract {}
+class CBloodArmoredFlemoidusBipedicus : CBloodChexBlood abstract {}
+class CBloodFlemoidusCycloptisCommonus : CBloodChexBlood abstract {}
+class CBloodFlembrane : CBloodChexBlood abstract {}
+class CBloodChexSoul : CBloodChexBlood abstract {}
+
+class CBloodFlemoidusCommonusV3 : CBloodChexBlood abstract {}
+class CBloodFlemoidusBipedicusV3 : CBloodChexBlood abstract {}
+class CBloodArmoredFlemoidusBipedicusV3 : CBloodChexBlood abstract {}
+class CBloodFlemoidusStridicus : CBloodChexBlood abstract {}
+class CBloodFlemoidusCycloptisCommonusV3 : CBloodChexBlood abstract {}
+class CBloodFlemMine : CBloodChexBlood abstract {}
+class CBloodSuperCycloptis : CBloodChexBlood abstract {}
+class CBloodFlemoidusMaximus : CBloodChexBlood abstract {}
+class CBloodFlembraneV3 : CBloodChexBlood abstract {}
+class CBloodLarva : CBloodChexBlood abstract {}
+class CBloodQuadrumpus : CBloodChexBlood abstract {}
+class CBloodSnotfolus : CBloodChexBlood abstract {}
+class CBloodFlembomination : CBloodChexBlood abstract {}
+
+//===========================================================================
+//
+// Eviternity monsters
+// (Submitted by MischiefNight)
+//
+//===========================================================================
+
+class CBloodAstralCaco : Actor abstract
+{
+	Default
+	{
+		BloodColor "75 75 75";
+	}
+}
+
+class CBloodNightmareDemon : Actor abstract
+{
+	Default
+	{
+		BloodColor "31 80 65";
+	}
+}
