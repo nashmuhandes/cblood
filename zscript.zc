@@ -1,6 +1,6 @@
-version "4.14.1"
+version "5.0"
 
-// Copyright 2020 - 2025 Nash Muhandes
+// Copyright 2020 - 2026 Nash Muhandes
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -146,26 +146,3 @@ class CBloodLarva : CBloodChexBlood abstract {}
 class CBloodQuadrumpus : CBloodChexBlood abstract {}
 class CBloodSnotfolus : CBloodChexBlood abstract {}
 class CBloodFlembomination : CBloodChexBlood abstract {}
-
-//===========================================================================
-//
-// Eviternity monsters
-// (Submitted by MischiefNight)
-//
-//===========================================================================
-
-class CBloodAstralCaco : Actor abstract
-{
-	Default
-	{
-		BloodColor "75 75 75";
-	}
-}
-
-class CBloodNightmareDemon : Actor abstract
-{
-	Default
-	{
-		BloodColor "31 80 65";
-	}
-}
