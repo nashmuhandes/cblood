@@ -37,12 +37,39 @@ version "5.0"
 
 class CBloodHandler : EventHandler
 {
+	private String lastBleeder;
+
+	// Keep track of last bleeding actor
+	override void WorldThingDamaged(WorldEvent e)
+	{
+		if (e.Thing && !e.Thing.bNOBLOOD)
+		{
+			lastBleeder = e.Thing.GetClass().GetClassName();
+		}
+	}
+
 	override void WorldThingSpawned(WorldEvent e)
 	{
 		if (!e.Thing)
 			return;
 
 		Actor mo = e.Thing;
+
+		// Translate spawned blood to correct palette range
+		// if bleeding monster has corresponding property
+		if (mo is "Blood" && lastBleeder)
+		{
+			String className = "CBlood" .. lastBleeder;
+			class<Actor> cls = className;
+			if (cls)
+			{
+				let cblood = GetDefaultByType(cls);
+				if (cblood && !cblood.bNoBlood && cblood.Translation)
+				{
+					mo.Translation = cblood.Translation;
+				}
+			}
+		}
 
 		if (!mo.bShootable)
 			return;
@@ -53,7 +80,7 @@ class CBloodHandler : EventHandler
 
 //===========================================================================
 //
-//
+// Deal with "truecolor" blood and non-bleeding monsters normally
 //
 //===========================================================================
 
@@ -66,7 +93,7 @@ class CBlood play
 		if (cls)
 		{
 			let cblood = GetDefaultByType(cls);
-			if (cblood)
+			if (cblood && !cblood.Translation)
 			{
 				mo.bNoBlood = cblood.bNoBlood;
 				mo.CopyBloodColor(cblood);
@@ -77,35 +104,44 @@ class CBlood play
 
 //===========================================================================
 //
-// Doom monsters
+// Presets
 //
 //===========================================================================
 
-class CBloodBaronOfHell : Actor abstract
-{
-	Default
-	{
-		BloodColor "30 67 23";
-	}
-}
-
-class CBloodHellKnight : CBloodBaronOfHell abstract {}
-
-class CBloodCacodemon : Actor abstract
-{
-	Default
-	{
-		BloodColor "00 00 F9";
-	}
-}
-
-class CBloodLostSoul : Actor abstract
+class NoBloodActor : Actor abstract
 {
 	Default
 	{
 		+NOBLOOD
 	}
 }
+
+class DoomGreenBloodActor : Actor abstract
+{
+	Default
+	{
+		Translation "168:191=112:127";
+	}
+}
+
+class DoomBlueBloodActor : Actor abstract
+{
+	Default
+	{
+		Translation "168:191=192:207";
+	}
+}
+
+//===========================================================================
+//
+// Doom monsters
+//
+//===========================================================================
+
+class CBloodBaronOfHell : DoomGreenBloodActor abstract {}
+class CBloodHellKnight : DoomGreenBloodActor abstract {}
+class CBloodCacodemon : DoomBlueBloodActor abstract {}
+class CBloodLostSoul : NoBloodActor abstract {}
 
 //===========================================================================
 //
